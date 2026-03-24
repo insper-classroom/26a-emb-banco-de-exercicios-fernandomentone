@@ -42,13 +42,14 @@ void gpio_callback(uint gpio, uint32_t events) {
     if (gpio == BTN_PIN) {
         flag_btn = true;
     }
-    if (gpio == SW_PIN) {
-        sw_state = (events & GPIO_IRQ_EDGE_FALL);
-    }
 }
 
 int main() {
     stdio_init_all();
+
+    gpio_init(BTN_PIN);
+    gpio_set_dir(BTN_PIN, GPIO_IN);
+    gpio_pull_up(BTN_PIN);
 
     gpio_init(SW_PIN);
     gpio_set_dir(SW_PIN, GPIO_IN);
@@ -57,7 +58,6 @@ int main() {
     bar_init();
     
     gpio_set_irq_enabled_with_callback(BTN_PIN, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
-    gpio_set_irq_enabled(SW_PIN, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true);
 
     int contador = 0;
 
@@ -65,17 +65,15 @@ int main() {
     
         if (flag_btn) {
             flag_btn = false;
-            if (sw_state == false) {
+            
+            if (gpio_get(SW_PIN)) {
                 contador++;
             } else {
                 contador--;
             }
-            if (contador > 5) {
-                contador = 5;
-            }
-            if (contador <0) {
-                contador = 0;
-            }
+            
+            if (contador > 5) contador = 5;
+            if (contador < 0) contador = 0;
 
             bar_display(contador);
         }

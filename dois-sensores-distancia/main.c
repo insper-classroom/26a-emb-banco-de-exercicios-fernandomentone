@@ -152,7 +152,7 @@ int main() {
 
             int distancia_1 = (int)((echo_dt_1 * 0.0343) / 2.0);
 
-            printf("Sensor 1 - dist: %d cm\n", distancia_1);
+            printf("Sensor 1 - %d cm\n", distancia_1);
 
             sensor_atual = 2;
         }
@@ -161,7 +161,7 @@ int main() {
 
             flag_watchdog_1 = 0;
 
-            printf("Sensor 1 - dist: falha\n");
+            printf("Sensor 1 - falha\n");
 
             sensor_atual = 2;
         }
@@ -174,7 +174,7 @@ int main() {
 
             int distancia_2 = (int)((echo_dt_2 * 0.0343) / 2.0);
 
-            printf("Sensor 2 - dist: %d cm\n", distancia_2);
+            printf("Sensor 2 - %d cm\n", distancia_2);
 
             sensor_atual = 1;
         }
@@ -183,7 +183,7 @@ int main() {
 
             flag_watchdog_2 = 0;
 
-            printf("Sensor 2 - dist: falha\n");
+            printf("Sensor 2 - falha\n");
 
             sensor_atual = 1;
         }

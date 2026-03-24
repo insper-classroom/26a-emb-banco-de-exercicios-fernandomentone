@@ -13,8 +13,8 @@ const int BTN_PIN_B = 19;
 static struct repeating_timer timer;
 volatile int flag_timer = 0;
 
-static int flag_btn_y = 0;
-static int flag_btn_b = 0;
+volatile int flag_btn_y = 0;
+volatile int flag_btn_b = 0;
 
 static alarm_id_t alarm;
 volatile int flag_alarm;
