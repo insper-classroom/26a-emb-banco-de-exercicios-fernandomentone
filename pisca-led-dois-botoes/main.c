@@ -127,6 +127,16 @@ int main() {
             }
         }
 
+        if (flag_timer_y) {
+            flag_timer_y = 0;
+            gpio_xor_mask(1u << LED_Y);
+        }
+
+        if (flag_timer_g) {
+            flag_timer_g = 0;
+            gpio_xor_mask(1u << LED_G);
+        }
+
     
     }
 }
