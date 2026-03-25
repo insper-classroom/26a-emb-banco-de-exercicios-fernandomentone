@@ -86,7 +86,7 @@ int main() {
             flag_alarm_y = 0;  // limpa alarm pendente
             led_y_active = true;
             gpio_put(LED_Y, 1);
-            add_repeating_timer_ms(250, timer_callback_y, NULL, &timer_y);
+            add_repeating_timer_ms(500, timer_callback_y, NULL, &timer_y);
             alarm_y = add_alarm_in_ms(2000, alarm_callback_y, NULL, false);
         }
 
@@ -95,7 +95,7 @@ int main() {
             flag_alarm_g = 0;  // limpa alarm pendente
             led_g_active = true;
             gpio_put(LED_G, 1);
-            add_repeating_timer_ms(100, timer_callback_g, NULL, &timer_g);
+            add_repeating_timer_ms(200, timer_callback_g, NULL, &timer_g);
             alarm_g = add_alarm_in_ms(1000, alarm_callback_g, NULL, false);
         }
 
@@ -131,12 +131,17 @@ int main() {
 
         if (flag_timer_y) {
             flag_timer_y = 0;
-            gpio_xor_mask(1u << LED_Y);
+            if (led_y_active) {
+                gpio_xor_mask(1u << LED_Y);
+            }
+
         }
 
         if (flag_timer_g) {
             flag_timer_g = 0;
-            gpio_xor_mask(1u << LED_G);
+            if (led_g_active) {
+                gpio_xor_mask(1u << LED_G);
+            }
         }
 
     
