@@ -80,63 +80,51 @@ int main() {
 
     stdio_init_all();
 
-    while (1) {
-        if (flag_btn_y) {
-            flag_btn_y = 0;
-            led_y_active = true;
-            gpio_put(LED_Y, 1);
-            add_repeating_timer_ms(250, timer_callback_y, NULL, &timer_y);
-            alarm_y = add_alarm_in_ms(2000, alarm_callback_y, NULL, false);
-        }
+    add_repeating_timer_ms(100, timer_callback_g, NULL, &timer_g);
+    add_repeating_timer_ms(250, timer_callback_y, NULL, &timer_y);
 
+    while (1) {
         if (flag_btn_g) {
             flag_btn_g = 0;
-            led_g_active = true;
-            gpio_put(LED_G, 1);
-            add_repeating_timer_ms(100, timer_callback_g, NULL, &timer_g);
-            alarm_g = add_alarm_in_ms(1000, alarm_callback_g, NULL, false);
-        }
-
-        if (flag_alarm_g) {
-            flag_alarm_g = 0;
-            cancel_repeating_timer(&timer_g);
-            flag_timer_g = 0;
-            led_g_active = false;
-            gpio_put(LED_G, 0);
-
-            if (led_y_active) {
-                cancel_repeating_timer(&timer_y);
-                cancel_alarm(alarm_y);
-                led_y_active = false;
-                gpio_put(LED_Y, 0);
+            if (!led_g_active) {
+                led_g_active = true;
+                gpio_put(LED_G, 1);
+                alarm_g = add_alarm_in_ms(1000, alarm_callback_g, NULL, false);
             }
         }
 
-        if (flag_alarm_y) {
-            flag_alarm_y = 0;
-            cancel_repeating_timer(&timer_y);
-            flag_timer_y = 0;
-            led_y_active = false;
-            gpio_put(LED_Y, 0);
+        if (flag_btn_y) {
+            flag_btn_y = 0;
+            if (!led_y_active) {
+                led_y_active = true;
+                gpio_put(LED_Y, 1);
+                alarm_y = add_alarm_in_ms(2000, alarm_callback_y, NULL, false);
+            }
+        }
 
+        if (flag_alarm_g || flag_alarm_y) {
+            flag_alarm_g = 0;
+            flag_alarm_y = 0;
+            cancel_alarm(alarm_g);
+            cancel_alarm(alarm_y);
+            led_g_active = false;
+            led_y_active = false;
+            gpio_put(LED_G, 0);
+            gpio_put(LED_Y, 0);
+        }
+
+        if (flag_timer_g) {
+            flag_timer_g = 0;
             if (led_g_active) {
-                cancel_repeating_timer(&timer_g);
-                cancel_alarm(alarm_g);
-                led_g_active = false;
-                gpio_put(LED_G, 0);
+                gpio_xor_mask(1u << LED_G);
             }
         }
 
         if (flag_timer_y) {
             flag_timer_y = 0;
-            gpio_xor_mask(1u << LED_Y);
-            
-
+            if (led_y_active) {
+                gpio_xor_mask(1u << LED_Y);
+            }
         }
-
-        if (flag_timer_g) {
-            flag_timer_g = 0;
-            gpio_xor_mask(1u << LED_G);
-        }    
     }
 }
