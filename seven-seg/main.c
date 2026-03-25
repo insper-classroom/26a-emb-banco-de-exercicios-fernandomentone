@@ -62,7 +62,7 @@ void seven_seg_display(int val) {
 volatile int flag_btn = 0;
 
 void gpio_callback(uint gpio, uint32_t events) {
-    if (gpio == BTN_PIN) {
+    if (gpio == BTN_PIN && (events & GPIO_IRQ_EDGE_FALL)) {
         flag_btn = 1;
     }
 }
@@ -87,7 +87,7 @@ int main() {
     while (true) {
         if (flag_btn){
             flag_btn = 0;
-            contador++;
+            contador = (contador + 1) % 10;
         }
 
         if(contador > 9) {
