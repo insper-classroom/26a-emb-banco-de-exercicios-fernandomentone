@@ -69,6 +69,7 @@ void gpio_callback(uint gpio, uint32_t events) {
 
 
 int main() {
+    stdio_init_all();  // mova para cá, ANTES de tudo
 
     gpio_init(BTN_PIN);
     gpio_set_dir(BTN_PIN, GPIO_IN);
@@ -78,20 +79,12 @@ int main() {
 
     gpio_set_irq_enabled_with_callback(BTN_PIN, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
 
-
-
-    stdio_init_all();
-
     int contador = 0;
 
     while (true) {
-        if (flag_btn){
+        if (flag_btn) {
             flag_btn = 0;
             contador = (contador + 1) % 10;
-        }
-
-        if(contador > 9) {
-            contador = 0;
         }
 
         seven_seg_display(contador);
