@@ -36,7 +36,7 @@ void seven_seg_init() {
     gpio_set_dir(G, GPIO_OUT);
 }
 
-void seven_seg_display(int val) {
+void even_seg_display(int val) {
     static const int numeros[10][7] = {
         {1, 1, 1, 1, 1, 1, 0}, // 0
         {0, 1, 1, 0, 0, 0, 0}, // 1
@@ -87,6 +87,6 @@ int main() {
             contador = (contador + 1) % 10;
         }
 
-        seven_seg_display(contador);
+        even_seg_display(contador);
     }
 }
